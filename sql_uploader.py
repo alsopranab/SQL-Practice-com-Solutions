@@ -2,49 +2,40 @@ import os
 import subprocess
 from datetime import datetime
 
-
 class SQLUploader:
     def __init__(self, repo_path: str):
         """
-        Initialize with the path of your Git repository.
+        Initialize with path to your SQL GitHub project folder.
         """
         self.repo_path = repo_path
         os.chdir(self.repo_path)
 
     def save_query(self, level: str, query: str):
         """
-        Save the SQL query to a file and push to GitHub.
+        Saves SQL query to a file and uploads to GitHub automatically.
         """
 
-        # Validate folder
-        allowed_levels = ["beginner", "intermediate", "advanced"]
-        if level not in allowed_levels:
-            raise ValueError(f"Invalid level. Use one of: {allowed_levels}")
+        # Valid folders
+        valid_levels = ["beginner", "intermediate", "advanced"]
+        if level not in valid_levels:
+            raise ValueError(f"Invalid level. Use one of {valid_levels}")
 
         # Ensure folder exists
         os.makedirs(level, exist_ok=True)
 
-        # Filename based on timestamp
+        # Generate filename with timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{level}/query_{timestamp}.sql"
 
-        # Write the query into the file
+        # Save SQL file
         with open(filename, "w") as f:
             f.write(query.strip() + "\n")
 
-        print(f"Saved SQL file: {filename}")
+        print(f"Saved: {filename}")
 
         # Git automation
-        self._git_push(filename)
-
-    def _git_push(self, file_path: str):
-        """
-        Internal method to handle git add, commit, and push.
-        """
-
-        subprocess.run(["git", "add", file_path])
-        subprocess.run(["git", "commit", "-m", f"Add SQL query: {file_path}"])
+        subprocess.run(["git", "add", filename])
+        subprocess.run(["git", "commit", "-m", f"Add SQL Query: {filename}"])
         subprocess.run(["git", "push"])
 
-        print(f"Uploaded to GitHub: {file_path}")
-
+        print("Uploaded to GitHub successfully!")
