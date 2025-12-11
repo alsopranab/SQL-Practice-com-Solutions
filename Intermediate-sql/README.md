@@ -1,5 +1,25 @@
 # Intermediate SQL Practice
 
+## 17. Unique Birth Years
+---
+### Problem Statement
+Show unique birth years from patients and order them by ascending.
+
+### Best Approach
+Extract year from birth_date and use DISTINCT. Then sort ascending.
+
+### Alternative Options
+Use GROUP BY YEAR(birth_date).
+
+### Solution
+```sql
+SELECT DISTINCT YEAR(birth_date) AS birth_year
+FROM patients
+ORDER BY birth_year;
+```
+---
+
+
 ## 18. Unique First Names Occurring Only Once
 ---
 ### Problem Statement
